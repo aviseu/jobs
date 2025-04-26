@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    mysql:
+        image: mysql:latest
+        container_name: mysql_jobs
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: jobs
+            MYSQL_USER: jobs
+            MYSQL_PASSWORD: pwd
+        ports:
+            - "3307:3306"
+        volumes:
+            - C:\docker-data\mysql\jobs:/var/lib/mysql
