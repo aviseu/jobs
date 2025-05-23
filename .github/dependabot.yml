@@ -4,7 +4,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    projects:
+      - name: "Jobs"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
+    projects:
+      - name: "Jobs"
