@@ -1,0 +1,34 @@
+name: Add Dependabot PRs to Project
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add PR to Project
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const projectNumber = 1;
+            const columnName = "Pending";
+            const { data: projects } = await github.rest.projects.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const project = projects.find(p => p.number === projectNumber);
+            if (!project) throw new Error(`Project #${projectNumber} not found`);
+            const { data: columns } = await github.rest.projects.listColumns({
+              project_id: project.id,
+            });
+            const column = columns.find(c => c.name === columnName);
+            if (!column) throw new Error(`Column "${columnName}" not found`);
+            await github.rest.projects.createCard({
+              column_id: column.id,
+              content_id: context.payload.pull_request.id,
+              content_type: "PullRequest",
+            });
